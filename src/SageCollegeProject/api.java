@@ -6,6 +6,8 @@
 
 package SageCollegeProject;
 
+import java.util.Map;
+
 /**
  *
  * @author SageCollegeProject
@@ -16,6 +18,8 @@ public class api {
     
     public static String GetVersion()
     {
+        Map test= new java.util.HashMap<String,Object>();
+    
     return Version;
     }
 
