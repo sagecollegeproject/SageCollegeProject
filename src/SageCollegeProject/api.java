@@ -17,9 +17,7 @@ public class api {
     private static String Version="Alpha_1.04";
     
     public static String GetVersion()
-    {
-        Map test= new java.util.HashMap<String,Object>();
-    
+    {    
     return Version;
     }
 
