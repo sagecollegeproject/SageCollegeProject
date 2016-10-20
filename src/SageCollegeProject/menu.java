@@ -26,6 +26,8 @@ public class menu {
     private static final String MainMenuPropAdder = "MainMenuItems";
 
     public static void main(String[] args) {
+        
+        //Test purposes only
         Configuration.SetProperty(Props + MainMenuPropAdder, "Shows;TV,Guide;Guide,ToDo;ToDo,Settings;Settings,Search;Search,Exit;Exit");
         RenameView("Shows;TV", "TV;TV");
         System.out.println(Configuration.GetProperty(Props + MainMenuPropAdder, ""));
