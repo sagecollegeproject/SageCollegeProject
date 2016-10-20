@@ -1,5 +1,0 @@
-2016-10-18 19:35:56,079 [Thread-0] INFO  sagex.remote.server.SimpleDatagramClient - Starting Datagram Client on 228.5.6.7:9998
-2016-10-18 19:35:56,556 [main] INFO  sagex.SageAPI - Sage Provider Implementation: sagex.remote.rmi.RMISageAPI; rmi://DESKTOP-NF5FJHF:1098
-2016-10-18 19:36:01,081 [Timer-0] INFO  sagex.remote.server.SimpleDatagramClient - Killing Datagram client after timeout
-2016-10-18 19:36:01,082 [Thread-0] WARN  sagex.remote.server.SimpleDatagramClient - Shutting Down: socket closed
-2016-10-18 19:36:01,082 [Thread-0] INFO  sagex.remote.server.SimpleDatagramClient - Datagram Client is shutting down
