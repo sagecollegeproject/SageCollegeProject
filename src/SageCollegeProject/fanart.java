@@ -25,7 +25,7 @@ public class fanart {
             Scale = bannerScale;
         }
 
-        if (phoenix.image.GetImage(Path, Tag) == null && Path.length() < 0) {
+        if (phoenix.image.GetImage(Path, Tag) == null || Path.length() < 0) {
 
             phoenix.image.CreateImage(Tag, Path, "[{name:scale, width:" + Scale + "}]", true);
 
