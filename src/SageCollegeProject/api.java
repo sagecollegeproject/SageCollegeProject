@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class api {
     
-    private static String Version="Alpha_1.04";
+    private static String Version="Alpha_1.05";
     
     public static String GetVersion()
     {    
