@@ -13,8 +13,12 @@ package SageCollegeProject;
  */
 public class api {
     
-    private static String Version="Alpha_1.05";
+    private static String Version="1.07";
     
+    public static void main(String[] args) 
+    {
+    System.out.println(Version);
+    }
     public static String GetVersion()
     {    
     return Version;
