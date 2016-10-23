@@ -16,6 +16,9 @@ import sagex.phoenix.vfs.IMediaResource;
  * @author SageCollegeProject
  */
 public class metadata {
+    
+    private static Object EpisodesSorted="";
+    private static int currIndex=0;
 
     public static String GetEpisodeNumPad(Object sageObj) {
         String epNum = Integer.toString(ShowAPI.GetShowEpisodeNumber(sageObj));
@@ -101,15 +104,26 @@ public class metadata {
         }
          return (Object[]) sagex.api.Database.SortLexical(Episodes, true,"SageCollegeProject_metadata_getSortedByWatchTime");
     }
+    public static Object[] GetEpisodesSorted()
+    {
+    return (Object[])EpisodesSorted;
+    }
+    
+    public static int GetEpisodeIndex()
+    {
+    return currIndex;
+    }
     
     public static Object getNextShow(Object[] episodes)
     {
       Object currEpisode= episodes[0];
       Object sageObj=phoenix.media.GetSageMediaFile(currEpisode);
-      if(sagex.api.AiringAPI.IsWatchedCompletely(sageObj))
-      {
       Object[] episodesResorted=(Object[]) sagex.api.Database.SortLexical(episodes,false,"SageCollegeProject_metadata_getSortedByAiringTime");
       int elementloc=sagex.api.Utility.FindElementIndex(episodesResorted,currEpisode);
+      EpisodesSorted= episodesResorted;
+      currIndex=elementloc;
+      if(sagex.api.AiringAPI.IsWatchedCompletely(sageObj))
+      {
       return episodesResorted[elementloc+1];
       }
       else
