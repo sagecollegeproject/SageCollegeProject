@@ -33,10 +33,10 @@ public class menu {
         
     }
 
-    public static void BuildAllViews(UIContext ui) {
+    public static void BuildAllViews(String ui) {
         System.out.println("Building all views");
         allViews = new HashMap<String, List<IMediaResource>>();
-        String[] menus = GetAllMenuItems();
+        String[] menus = GetAllMenuItems(ui);
         System.out.println("Total menus found =" + menus.length);
         for (int i = 0; i < menus.length; i++) {
             String cMenu = menus[i];
@@ -45,7 +45,7 @@ public class menu {
             System.out.println("Current Menu Item =" + name + " " + type);
             if (needsView(type)) {
                 System.out.println("View is TV type lets build it =" + name);
-                String view = GetMenuView(name, type);
+                String view = GetMenuView(ui,name, type);
                 if (!view.equals("")) {
                     allViews.put(name, buildView(view));
                 }
@@ -54,8 +54,8 @@ public class menu {
 
     }
 
-    public static String[] GetAllMenuItems() {
-        String menuItems = Configuration.GetProperty(UIContext.getCurrentContext(),Props + MainMenuPropAdder, "Shows;TV,Guide;Guide,ToDo;Todo,Settings;Settings,Search;Search,Exit;Exit");
+    public static String[] GetAllMenuItems(String ui) {
+        String menuItems = Configuration.GetProperty(new UIContext(ui),Props + MainMenuPropAdder, "Shows;TV,Guide;Guide,ToDo;Todo,Settings;Settings,Search;Search,Exit;Exit");
         if (!menuItems.contains(",")) {
             System.out.println("Main Menu Items is not a valid property please reset value=" + menuItems);
         }
@@ -63,26 +63,26 @@ public class menu {
         return menus;
     }
 
-    public static void setColorProperty(String Name, String Value) {
-        Configuration.SetProperty(Name, Value);
-        Configuration.SetProperty(Props + Name + ColorPropAdder, Value);
+    public static void setColorProperty(String ui,String Name, String Value) {
+        Configuration.SetProperty(new UIContext(ui),Name, Value);
+        Configuration.SetProperty(new UIContext(ui),Props + Name + ColorPropAdder, Value);
     }
 
-    public static void setViewProperty(String Name, String Value) {
-        Configuration.SetProperty(Props + Name + ViewPropAdder, Value);
+    public static void setViewPropeerty(String ui,String Name, String Value) {
+        Configuration.SetProperty(new UIContext(ui),Props + Name + ViewPropAdder, Value);
     }
 
-    public static void deleteMenuItem(String Menu) {
+    public static void deleteMenuItem(String ui,String Menu) {
         String name = GetMenuName(Menu);
-        deleteMenuViewProp(Menu);
+        deleteMenuViewProp(ui,Menu);
         List<String> propsToDelete = GetProperties(name);
         for (String prop : propsToDelete) {
-            deleteMenuViewProp(prop);
+            deleteMenuViewProp(ui,prop);
         }
     }
 
-    public static void deleteMenuViewProp( String Menu) {
-        String[] menu = GetAllMenuItems();
+    public static void deleteMenuViewProp(String ui,String Menu) {
+        String[] menu = GetAllMenuItems(ui);
         StringBuilder newMenu = new StringBuilder();
         for (int i = 0; i < menu.length; i++) {
             if (menu[i].equals(Menu)) {
@@ -95,7 +95,7 @@ public class menu {
 
         }
         System.out.println("Writing new menu to props file " + newMenu.toString());
-        Configuration.SetProperty(UIContext.getCurrentContext(), Props + MainMenuPropAdder, newMenu.toString());
+        Configuration.SetProperty(new UIContext(ui), Props + MainMenuPropAdder, newMenu.toString());
     }
 
     public static List<String> GetProperties(String Name) {
@@ -109,26 +109,26 @@ public class menu {
         Configuration.RemoveProperty(Prop);
     }
 
-    public static void RenameView( String Menu, String nMenu) {
+    public static void RenameView(String ui,String Menu, String nMenu) {
         String name = GetMenuName(Menu);
         String nName = GetMenuName(nMenu);
         for (String prop : GetProperties(name)) {
-            String cPropValue = Configuration.GetProperty(UIContext.getCurrentContext(),prop, "");
-            Configuration.SetProperty(UIContext.getCurrentContext(), prop.replace(name, nName), cPropValue);
+            String cPropValue = Configuration.GetProperty(new UIContext(ui),prop, "");
+            Configuration.SetProperty(new UIContext(ui), prop.replace(name, nName), cPropValue);
         }
-        RenameMenuItem(Menu, nMenu);
+        RenameMenuItem(ui,Menu, nMenu);
     }
 
-    public static void RenameMenuItem(String Menu, String nMenu) {
-        String props = Configuration.GetProperty(UIContext.getCurrentContext(),Props + MainMenuPropAdder, "");
+    public static void RenameMenuItem(String ui,String Menu, String nMenu) {
+        String props = Configuration.GetProperty(new UIContext(ui),Props + MainMenuPropAdder, "");
         props = props.replace(Menu, nMenu);
-        Configuration.SetProperty(UIContext.getCurrentContext(), Props + MainMenuPropAdder, props);
+        Configuration.SetProperty(new UIContext(ui), Props + MainMenuPropAdder, props);
     }
 
-    public static void addMenuItem( String Menu) {
-        String curMenu = Configuration.GetProperty(UIContext.getCurrentContext(),Props + MainMenuPropAdder, "");
+    public static void addMenuItem(String ui,String Menu) {
+        String curMenu = Configuration.GetProperty(new UIContext(ui),Props + MainMenuPropAdder, "");
         curMenu = curMenu + "," + Menu;
-        Configuration.SetProperty(UIContext.getCurrentContext(), Props + MainMenuPropAdder, curMenu);
+        Configuration.SetProperty(new UIContext(ui), Props + MainMenuPropAdder, curMenu);
     }
 
     public static List<IMediaResource> getPreBuiltView(String view) {
@@ -168,18 +168,18 @@ public class menu {
         return Type.equals("Guide") || Type.equals("ToDo");
     }
 
-    public static String GetMenuView( String name, String type) {
+    public static String GetMenuView(String ui,String name, String type) {
 
-        String value = Configuration.GetProperty(UIContext.getCurrentContext(),Props + name + ViewPropAdder, "NotSet");
+        String value = Configuration.GetProperty(new UIContext(ui),Props + name + ViewPropAdder, "NotSet");
         if (doesPropertyNeedSet(value)) {
 
             if (isTypeTV(type)) {
                 System.out.println("Property not set for view settings to default for TV view=" + name);
-                Configuration.SetProperty(UIContext.getCurrentContext(), Props + name, TVDefaultView);
+                Configuration.SetProperty(new UIContext(ui), Props + name, TVDefaultView);
                 return TVDefaultView;
             } else if (isTypeGuide(type)) {
                 System.out.println("Property not set for view settings to default for Guide view=" + name);
-                Configuration.SetProperty(UIContext.getCurrentContext(), Props + name, GuideDefaultView);
+                Configuration.SetProperty(new UIContext(ui), Props + name, GuideDefaultView);
                 return GuideDefaultView;
             } else {
                 System.out.println("Property not set and not a default TV or Guide property=" + name);
