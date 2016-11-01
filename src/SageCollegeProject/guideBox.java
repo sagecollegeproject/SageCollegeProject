@@ -35,18 +35,21 @@ public class guideBox {
     public static String base_URL = "http://api-public.guidebox.com/v1.43/1/rKBCCjBUyk3HpNDywPozT2DIFZqLFkOk/";
     private static String AllShowsJsonFile = "userdata/SCP/GuideBox/AllShows.json";
     private static HashMap<String,String> URLMap=new HashMap<String,String>();
+    public static String guideboxUpdateProp=menu.Props+"LastGuideBoxUpdate";
 
     public static void main(String[] args) throws MalformedURLException, IOException, URISyntaxException {
         System.out.println(ReadAllShowsfromFile().size());
     }
 
     public static void UpdateAllShowJsonFile() {
+        System.out.println("Getting ready to read all guidebox data for shows.");
         ArrayList<guide_ShowObject> res = new ArrayList<>();
         ReadAllShowsFromWeb(res);
         Gson gson = new GsonBuilder().create();
         String json = gson.toJson(res);
         System.out.println(res.size());
         WriteJsonToFile(json, AllShowsJsonFile);
+        sagex.api.Configuration.SetServerProperty(guideboxUpdateProp,java.lang.String.valueOf(System.currentTimeMillis()));
     }
 
     public static String GetEncWebCall(String webcall) {
@@ -92,6 +95,8 @@ public class guideBox {
             resultamount = Integer.parseInt(test.getTotal_results());
             res.addAll(test.getResults());
             pos = pos + 250;
+            System.out.println("SCP GuideBox_Reading all shows total of="+resultamount);
+            System.out.println("SCP GuideBox_Current position of shows ="+pos);
         }
     }
 
@@ -127,13 +132,23 @@ public class guideBox {
         }
         return null;
     }
+    
+    public static void updateURLMap()
+    {
+    clearURLMap();
+    setAllTitleURLs();
+    }
 
-    public static void setAllTitleURLs() throws IOException {
+    public static void setAllTitleURLs() {
         HashMap<String, String> urlsMap = new HashMap<String, String>();
         for (guide_ShowObject cur : ReadAllShowsfromFile()) {
             urlsMap.put(cur.getTitle(), cur.getArtwork_208x117());
         }
         URLMap.putAll(urlsMap);
+    }
+    public static void clearURLMap()
+    {
+    URLMap.clear();
     }
     
     public static boolean hasGuideBoxImage(String title)

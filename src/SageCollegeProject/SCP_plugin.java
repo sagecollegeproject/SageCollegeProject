@@ -6,9 +6,11 @@
 
 package SageCollegeProject;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
-import sage.SageTVEventListener;
-import sage.SageTVPluginRegistry;
+import sage.SageTVPlugin;
+import javax.swing.Timer;
 
 
 
@@ -16,34 +18,103 @@ import sage.SageTVPluginRegistry;
  *
  * @author SageCollegeProject
  */
-public class SCP_plugin implements SageTVPluginRegistry {
+public class SCP_plugin implements SageTVPlugin {
+    
+    private Timer timer;
+    private Integer timeBetween=1000*60*60*24;
 
-    public void start()
+    public SCP_plugin(sage.SageTVPluginRegistry arg)
     {
-     System.out.println("We are running");
-      for(int i=0;i<100;i++)
+    
+    }
+    @Override
+    public void start() {
+      System.out.println("Background loading of GuideBox data started for SageCollegeProject");
+      timer= new Timer(timeBetween,new ActionListener(){
+    public void actionPerformed(ActionEvent e) {
+    System.out.println("Timer up lets reupdate GuideBoxData");
+    guideBox.UpdateAllShowJsonFile();
+    guideBox.updateURLMap();
+    }});
+      Long lastUpdate=java.lang.Long.getLong(sagex.api.Configuration.GetServerProperty(guideBox.guideboxUpdateProp,"100"));
+      System.out.println("Chk1");
+      if(lastUpdate == null)
       {
-      System.out.println("We are running");
+                System.out.println("Chk2");
+
+      lastUpdate=java.lang.Long.parseLong("100");
       }
+            System.out.println("Chk3");
+
+      Long currTime=System.currentTimeMillis();
+            System.out.println("Chk4");
+
+      Long delayTime=(currTime-lastUpdate>timeBetween)||lastUpdate==100?1000:currTime-lastUpdate;
+      System.out.println("SCP GuideBox delay until next update ="+delayTime);
+      timer.setInitialDelay(delayTime.intValue());
+      timer.start();
     }
 
     @Override
-    public void eventSubscribe(SageTVEventListener sl, String string) {
+    public void stop() {
+        timer.stop();
     }
 
     @Override
-    public void eventUnsubscribe(SageTVEventListener sl, String string) {
+    public void destroy() {
+    timer.stop();
     }
 
     @Override
-    public void postEvent(String string, Map map) {
+    public String[] getConfigSettings() {
+    return null;
     }
 
     @Override
-    public void postEvent(String string, Map map, boolean bln) {
+    public String getConfigValue(String string) {
+    return null;
     }
-    
-    
+
+    @Override
+    public String[] getConfigValues(String string) {
+    return null;
+    }
+
+    @Override
+    public int getConfigType(String string) {
+    return 0;
+    }
+
+    @Override
+    public void setConfigValue(String string, String string1) {
+    }
+
+    @Override
+    public void setConfigValues(String string, String[] strings) {
+    }
+
+    @Override
+    public String[] getConfigOptions(String string) {
+    return null;
+    }
+
+    @Override
+    public String getConfigHelpText(String string) {
+    return null;
+     }
+
+    @Override
+    public String getConfigLabel(String string) {
+    return null;
+    }
+
+    @Override
+    public void resetConfig() {
+    }
+
+    @Override
+    public void sageEvent(String string, Map map) {
+    }
 
    
 

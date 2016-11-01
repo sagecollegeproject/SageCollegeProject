@@ -20,7 +20,7 @@ import sagex.phoenix.vfs.IMediaResource;
 public class menu {
 
     private static HashMap<String, List<IMediaResource>> allViews;
-    private static final String Props = "SageCollegeProject_";
+    public static final String Props = "SageCollegeProject_";
     private static final String TVDefaultView = "sagecollegeproject.allTVseasons";
     private static final String GuideDefaultView = "sagecollegeproject.currentlyairing";
     private static final String ViewPropAdder = "VFSView";
