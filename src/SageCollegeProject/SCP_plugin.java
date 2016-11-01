@@ -16,7 +16,7 @@ import sage.SageTVPluginRegistry;
  *
  * @author SageCollegeProject
  */
-public class SCP_plugin implements SageTVPluginRegistry  {
+public class SCP_plugin implements SageTVPluginRegistry {
 
     public void start()
     {

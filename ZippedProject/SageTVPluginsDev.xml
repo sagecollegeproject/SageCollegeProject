@@ -6,15 +6,15 @@
     <Author>colleproject</Author>
     <CreationDate>2016-10-19</CreationDate>
     <ModificationDate>2016.11.1</ModificationDate>
-    <Version beta="true">1.15</Version>
+    <Version beta="true">1.16</Version>
     <Desktop>false</Desktop>
-    <ImplementationClass>SageCollegeProject.SCP_plugin</ImplementationClass>
-    <PluginType>Library</PluginType>
+    <PluginType>Standard</PluginType>
     <Package>
         <PackageType>JAR</PackageType>
-        <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProject_Jar_1.15.zip</Location>
-        <MD5>5dcf76827960cdf808d932f7ad39dc90</MD5>
+        <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProject_Jar_1.16.zip</Location>
+        <MD5>3cb920d4b0262496cab7b8cf175a336f</MD5>
     </Package>
+    <ImplementationClass>SageCollegeProject.SCP_plugin</ImplementationClass>
 </SageTVPlugin><SageTVPlugin>
   <Name>SageCollegeProject_UI</Name>
   <Identifier>SageCollegeProjectSTVi</Identifier>
