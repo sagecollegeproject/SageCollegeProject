@@ -33,4 +33,10 @@ public class fanart {
         return phoenix.image.GetImage(Path, Tag);
 
     }
+    
+    public static Object GetShowImage(String Title)
+    {
+    if(guideBox.hasGuideBoxImage(Title)){return guideBox.getGuideBoxImage(Title);}
+    else{return phoenix.fanart.GetDefaultEpisode(Title);}
+    }
 }
