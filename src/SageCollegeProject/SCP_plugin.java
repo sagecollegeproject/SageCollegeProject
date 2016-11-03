@@ -37,19 +37,12 @@ public class SCP_plugin implements SageTVPlugin {
     guideBox.updateURLMap();
     }});
       Long lastUpdate=java.lang.Long.getLong(sagex.api.Configuration.GetServerProperty(guideBox.guideboxUpdateProp,"100"));
-      System.out.println("Chk1");
       if(lastUpdate == null)
       {
-                System.out.println("Chk2");
-
       lastUpdate=java.lang.Long.parseLong("100");
       }
-            System.out.println("Chk3");
-
       Long currTime=System.currentTimeMillis();
-            System.out.println("Chk4");
-
-      Long delayTime=(currTime-lastUpdate>timeBetween)||lastUpdate==100?1000:currTime-lastUpdate;
+      Long delayTime=(currTime-lastUpdate>timeBetween.longValue())||lastUpdate==100?1000:currTime-lastUpdate;
       System.out.println("SCP GuideBox delay until next update ="+delayTime);
       timer.setInitialDelay(delayTime.intValue());
       timer.start();
