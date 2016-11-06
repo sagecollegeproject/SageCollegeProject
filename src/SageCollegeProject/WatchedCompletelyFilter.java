@@ -29,6 +29,11 @@ public class WatchedCompletelyFilter extends Filter{
     
     }
     
+    public WatchedCompletelyFilter()
+    {
+    this(true);
+    }
+    
     @Override
     protected boolean canAccept(IMediaResource imr) {
        boolean watchedCompletely = getOption(OPT_VALUE).getBoolean(true);

@@ -83,7 +83,7 @@ public class metadata {
     
     public static Boolean isSingleSeason(IMediaFolder show)
     {
-    return phoenix.umb.GetChildCount(show)==1;
+    return phoenix.umb.GetChildCount(show)==1||phoenix.umb.IsFolder(phoenix.umb.GetChild(show,0))==false;
     }
     
     public static Object[] SortShowsByWatched(IMediaFolder show)

@@ -30,6 +30,8 @@ public class SCP_plugin implements SageTVPlugin {
     @Override
     public void start() {
       System.out.println("Background loading of GuideBox data started for SageCollegeProject");
+      System.out.println("Go ahead and set next files");
+      nextEpisodes.CreateAllViewsForEpisodeNext();
       timer= new Timer(timeBetween,new ActionListener(){
     public void actionPerformed(ActionEvent e) {
     System.out.println("Timer up lets reupdate GuideBoxData");

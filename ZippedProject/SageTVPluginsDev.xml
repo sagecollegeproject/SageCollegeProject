@@ -5,7 +5,7 @@
     <Description>SageTV Dependency JAR Plugin for SageCollegeProject-UI do not download independently</Description>
     <Author>colleproject</Author>
     <CreationDate>2016-10-19</CreationDate>
-    <ModificationDate>2016.11.1</ModificationDate>
+    <ModificationDate>2016.11.5</ModificationDate>
     <Version beta="true">1.18</Version>
     <Desktop>false</Desktop>
     <Dependency>
@@ -20,7 +20,7 @@
     <Package>
         <PackageType>JAR</PackageType>
         <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProject_Jar_1.18.zip</Location>
-        <MD5>0dcba56b990505b735f237fec94e948b</MD5>
+        <MD5>0aa19c8715ecd2c5946b62dda8191a00</MD5>
     </Package>
     <ImplementationClass>SageCollegeProject.SCP_plugin</ImplementationClass>
 </SageTVPlugin><SageTVPlugin>
@@ -29,8 +29,8 @@
   <Description>Sage College Project was written by a college student for Sagetv. It is a very simplte UI meant for use on Nvidia shield or like mini client. Options are limited. </Description>
   <Author>CollegeProject</Author>
   <CreationDate>2016-10-19</CreationDate>
-  <ModificationDate>2016.10.25</ModificationDate>
-  <Version beta="true">1.15</Version> 
+  <ModificationDate>2016.11.5</ModificationDate>
+  <Version beta="true">1.00</Version> 
    <ReleaseNotes>*A1.04 Initial Alpha release</ReleaseNotes>
   <Webpage>https://forums.sagetv.com/forums/showthread.php?t=63441</Webpage>
   <Dependency>
@@ -55,14 +55,14 @@
 
   <Package>
     <PackageType>STVI</PackageType>
-    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProjectSTVi_Aplha1.15.zip</Location>
-    <MD5>cadf38949efcf546aef7aff0a3d30eca</MD5>
+    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProjectSTVi_Beta1.00.zip</Location>
+    <MD5>8d43056d00fa9755b03b9ba765c0855a</MD5>
   </Package>
    <Package>
     <PackageType>System</PackageType>
-    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProjectVFS1.00.zip</Location>
-   <MD5>93063d81874b3d0ed5f565c6283c0e26</MD5>
+    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/2016.11.5</Location>
+   <MD5>2688d8533a6046fb44b3880871372591</MD5>
     </Package>
-<STVImport>SageCollegeProject_Alpha1.15.stvi</STVImport>
+<STVImport>SageCollegeProject_PublicBeta_1.00.stvi</STVImport>
 </SageTVPlugin>
 </PluginRepository>
