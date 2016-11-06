@@ -30,7 +30,7 @@
   <Author>CollegeProject</Author>
   <CreationDate>2016-10-19</CreationDate>
   <ModificationDate>2016.11.5</ModificationDate>
-  <Version beta="true">1.00</Version> 
+  <Version beta="true">1.01</Version> 
    <ReleaseNotes>*A1.04 Initial Alpha release</ReleaseNotes>
   <Webpage>https://forums.sagetv.com/forums/showthread.php?t=63441</Webpage>
   <Dependency>
@@ -55,14 +55,14 @@
 
   <Package>
     <PackageType>STVI</PackageType>
-    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProjectSTVi_Beta1.00.zip</Location>
-    <MD5>8d43056d00fa9755b03b9ba765c0855a</MD5>
+    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProjectSTVi_Beta1.01.zip</Location>
+    <MD5>97eeb673a37d49e4593dfda835860807</MD5>
   </Package>
    <Package>
     <PackageType>System</PackageType>
     <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProjectVFS1.01.zip</Location>
    <MD5>2688d8533a6046fb44b3880871372591</MD5>
     </Package>
-<STVImport>SageCollegeProject_PublicBeta_1.00.stvi</STVImport>
+<STVImport>SageCollegeProject_PublicBeta_1.01.stvi</STVImport>
 </SageTVPlugin>
 </PluginRepository>
