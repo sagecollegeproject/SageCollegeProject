@@ -60,7 +60,7 @@
   </Package>
    <Package>
     <PackageType>System</PackageType>
-    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/2016.11.5</Location>
+    <Location>https://github.com/sagecollegeproject/SageCollegeProject/raw/master/ZippedProject/SageCollegeProjectVFS1.01.zip</Location>
    <MD5>2688d8533a6046fb44b3880871372591</MD5>
     </Package>
 <STVImport>SageCollegeProject_PublicBeta_1.00.stvi</STVImport>
