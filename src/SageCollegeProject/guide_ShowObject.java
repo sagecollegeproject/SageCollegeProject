@@ -18,6 +18,24 @@ private String imdb_id;
 private String tvdb;
 private String themoviedb;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+private String poster;
+private String id;
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
     public String getImdb_id() {
         return imdb_id;
     }

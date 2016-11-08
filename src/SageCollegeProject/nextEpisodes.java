@@ -48,6 +48,10 @@ public class nextEpisodes {
         long time=System.currentTimeMillis();
         CreateAllViewsForEpisodeNext();
         System.out.println("time to run "+(time-System.currentTimeMillis()));
+        for(Object test:GetTopBarItems(3,3))
+        {
+        System.out.println(phoenix.media.GetTitle(test));
+        }
       
     }
         
@@ -58,7 +62,7 @@ public class nextEpisodes {
       return CheckAndGetEpisode(firstEp);
     }
     
-    public static Object GetTopBarItems(int countNew,int countRecent)
+    public static List<IMediaResource> GetTopBarItems(int countNew,int countRecent)
     {
    
     newIMR.clear();

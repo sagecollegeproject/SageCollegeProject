@@ -13,6 +13,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,6 +26,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +43,9 @@ public class guideBox {
     public static String guideboxUpdateProp=menu.Props+"LastGuideBoxUpdate";
 
     public static void main(String[] args) throws MalformedURLException, IOException, URISyntaxException {
-        System.out.println(ReadAllShowsfromFile().size());
+    Long t= System.currentTimeMillis();
+        GetShowPoster("2097");
+        System.out.println(System.currentTimeMillis()-t);
     }
 
     public static void UpdateAllShowJsonFile() {
@@ -91,6 +98,11 @@ public class guideBox {
             String out = GetURLReturn("shows/all/" + pos + "/250/all/all");
             Gson gson = new GsonBuilder().create();
             guide_results test = gson.fromJson(out, guide_results.class);
+            for(guide_ShowObject curShow:test.getResults())
+            {
+                curShow.setPoster(GetShowPoster(curShow.getId()));
+                System.out.println("Poster found +"+curShow.getPoster());
+            }
             System.out.println(test.getTotal_results() + "Current " + pos);
             resultamount = Integer.parseInt(test.getTotal_results());
             res.addAll(test.getResults());
@@ -98,6 +110,19 @@ public class guideBox {
             System.out.println("SCP GuideBox_Reading all shows total of="+resultamount);
             System.out.println("SCP GuideBox_Current position of shows ="+pos);
         }
+    }
+    
+    public static String GetShowPoster(String showID)
+    {
+    
+    String out= GetURLReturn("show/"+showID+"/images/poster");
+    JsonParser parser = new JsonParser();
+   JsonObject obj = parser.parse(out).getAsJsonObject();
+   JsonObject test=obj.get("results").getAsJsonObject();
+   JsonArray posters=test.getAsJsonArray("posters");
+   JsonObject lPosters=posters.get(0).getAsJsonObject();
+   JsonObject medPoster=lPosters.getAsJsonObject("medium");
+   return medPoster.get("url").getAsString();
     }
 
     public static String GetURLReturn(String Call) {
@@ -160,5 +185,6 @@ public class guideBox {
     {
     return URLMap.get(title);
     }
-
+    
+   
 }

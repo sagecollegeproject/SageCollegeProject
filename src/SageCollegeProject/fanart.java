@@ -34,9 +34,9 @@ public class fanart {
 
     }
     
-    public static Object GetShowImage(String Title)
+    public static Object GetShowImage(String Title,Object SageObj)
     {
     if(guideBox.hasGuideBoxImage(Title)){return guideBox.getGuideBoxImage(Title);}
-    else{return phoenix.fanart.GetDefaultEpisode(Title);}
+    else{return phoenix.fanart.GetDefaultEpisode(SageObj);}
     }
 }
