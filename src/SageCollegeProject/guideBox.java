@@ -98,11 +98,11 @@ public class guideBox {
             String out = GetURLReturn("shows/all/" + pos + "/250/all/all");
             Gson gson = new GsonBuilder().create();
             guide_results test = gson.fromJson(out, guide_results.class);
-            for(guide_ShowObject curShow:test.getResults())
-            {
-                curShow.setPoster(GetShowPoster(curShow.getId()));
-                System.out.println("Poster found +"+curShow.getPoster());
-            }
+           // for(guide_ShowObject curShow:test.getResults())
+           // {
+           //     curShow.setPoster(GetShowPoster(curShow.getId()));
+           //     System.out.println("Poster found +"+curShow.getPoster());
+           // }
             System.out.println(test.getTotal_results() + "Current " + pos);
             resultamount = Integer.parseInt(test.getTotal_results());
             res.addAll(test.getResults());

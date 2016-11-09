@@ -13,14 +13,21 @@ public class fanart {
 
     private static String posterScale = "252";
     private static String bannerScale = "758";
-    private static String backgroundScale = "720";
+    private static String backgroundScale = "1920";
+    private static String thumb_backgroundScale = "240";
+
 
     public static Object GetScaledFanart(String Tag, String Path) {
         String Scale = "200";
         if (Tag.contains("Poster")) {
             Scale = posterScale;
         } else if (Tag.contains("Background")) {
-            Scale = backgroundScale;
+            if (Tag.contains("thumb"))
+                    {
+                    Scale=thumb_backgroundScale;
+                    }
+            else{
+            Scale = backgroundScale;}
         } else {
             Scale = bannerScale;
         }

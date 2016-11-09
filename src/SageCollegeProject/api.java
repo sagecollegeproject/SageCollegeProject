@@ -13,7 +13,7 @@ package SageCollegeProject;
  */
 public class api {
     
-    private static String Version="1.21";
+    private static String Version="1.24";
     
     public static void main(String[] args) 
     {
