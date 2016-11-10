@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package SageCollegeProject;
 
 import java.util.ArrayList;
@@ -15,131 +14,112 @@ import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.IMediaFolder;
 import sagex.phoenix.vfs.views.ViewFolder;
 
-
 /**
  *
  * @author SageCollegeProject
  */
-public class nextEpisodes { 
-    
+public class nextEpisodes {
+
     public static ViewFolder lastWatched;
     public static ViewFolder sortedEpisodes;
     public static ViewFolder recentEpisodes;
-    public static List<IMediaResource> newIMR=new ArrayList<IMediaResource>();
-    public static List<IMediaResource> nextIMR=new ArrayList<IMediaResource>();
+    public static List<IMediaResource> newIMR = new ArrayList<IMediaResource>();
+    public static List<IMediaResource> nextIMR = new ArrayList<IMediaResource>();
 
-    
-    public static void CreateAllViewsForEpisodeNext()
-    {
-       
-        lastWatched=CreateView("sagecollegeproject.allTVRecentlyWatched");
-        sortedEpisodes=CreateView("sagecollegeproject.allTVnoSeasons");
-        recentEpisodes =CreateView("sagecollegeproject.RecentActivity");
-    }
-    
-    public static ViewFolder CreateView(String View)
-    {
-    return phoenix.umb.CreateView(View);
-    }
-    
     public static void main(String[] args) {
         sage.Sage.TESTING = true;
         Phoenix.getInstance().initServices();
-        long time=System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         CreateAllViewsForEpisodeNext();
-        System.out.println("time to run "+(time-System.currentTimeMillis()));
-        for(Object test:GetTopBarItems(3,3))
-        {
-        System.out.println(phoenix.media.GetTitle(test));
+        System.out.println("time to run " + (time - System.currentTimeMillis()));
+        System.out.println(GetTopBarItems(3, 3).size());
+        for (Object test : GetTopBarItems(3, 3)) {
+            System.out.println(phoenix.media.GetTitle(test));
         }
-      
+
     }
-        
-    public static IMediaResource GetNextEpisodeForTitle(String title)
-    {
-      IMediaResource cFolder =lastWatched.getChild(title);
-      IMediaResource firstEp=phoenix.umb.GetChild((IMediaFolder)cFolder,0);
-      return CheckAndGetEpisode(firstEp);
+
+    public static void CreateAllViewsForEpisodeNext() {
+
+        lastWatched = CreateView("sagecollegeproject.allTVRecentlyWatched");
+        sortedEpisodes = CreateView("sagecollegeproject.allTVnoSeasons");
+        recentEpisodes = CreateView("sagecollegeproject.RecentActivity");
     }
-    
-    public static List<IMediaResource> GetTopBarItems(int countNew,int countRecent)
-    {
-   
-    newIMR.clear();
-    nextIMR.clear();
-    newIMR=GetNewestEpisodesToWatch(countNew);
-    nextIMR=GetNextEpisodesToWatch(countRecent);
-    List<IMediaResource> shuffled=(List<IMediaResource>)sagex.api.Database.DataUnion(newIMR,nextIMR);
-    Collections.shuffle(shuffled);
-    return shuffled;
+
+    public static ViewFolder CreateView(String View) {
+        return phoenix.umb.CreateView(View);
     }
-    
-    public static boolean isNew(IMediaResource imr)
-    {
-    return newIMR.contains(imr);
+
+    public static IMediaResource GetNextEpisodeForTitle(String title) {
+        IMediaResource cFolder = lastWatched.getChild(title);
+        IMediaResource firstEp = phoenix.umb.GetChild((IMediaFolder) cFolder, 0);
+        return CheckAndGetEpisode(firstEp);
     }
-    
-    public static boolean isNext(IMediaResource imr)
-    {
-    return nextIMR.contains(imr);
+
+    public static List<IMediaResource> GetTopBarItems(int countNew, int countRecent) {
+
+        newIMR.clear();
+        nextIMR.clear();
+        newIMR = GetNewestEpisodesToWatch(countNew);
+        nextIMR = GetNextEpisodesToWatch(countRecent);
+        List<IMediaResource> shuffled = new ArrayList<IMediaResource>();
+        shuffled.addAll(newIMR);
+        shuffled.addAll(nextIMR);
+        Collections.shuffle(shuffled);
+        return shuffled;
     }
-    
-    public static IMediaResource GetEpisodeChild(IMediaResource imr)
-    {
-    return phoenix.umb.GetFolder(imr);
+
+    public static boolean isNew(IMediaResource imr) {
+        return newIMR.contains(imr);
     }
-    
-    public static List<IMediaResource> GetNewestEpisodesToWatch(int num)
-    {
-    List<IMediaResource> results= new ArrayList<IMediaResource>();
-    for(int count=0;count<num;count++)
-    {
-    results.add(recentEpisodes.getChildren().get(count));
+
+    public static boolean isNext(IMediaResource imr) {
+        return nextIMR.contains(imr);
     }
-    return results;
+
+    public static IMediaResource GetEpisodeChild(IMediaResource imr) {
+        return phoenix.umb.GetFolder(imr);
     }
-    
-    public static List<IMediaResource> GetNextEpisodesToWatch(int num)
-    {
-    List<IMediaResource> results= new ArrayList<IMediaResource>();
-    for(int count=0;count<num;)
-    {
-      IMediaResource cFolder =lastWatched.getChildren().get(count);
-      IMediaResource firstEp=phoenix.umb.GetChild((IMediaFolder)cFolder,0);
-      IMediaResource nEpisode =CheckAndGetEpisode(firstEp);
-      if(!nEpisode.equals(null)){
-      results.add(CheckAndGetEpisode(firstEp));
-      count++;
-      }
-      else
-      {
-          //We didn't find a next episode for this show so don't increase count
-      }
+
+    public static List<IMediaResource> GetNewestEpisodesToWatch(int num) {
+        List<IMediaResource> results = new ArrayList<IMediaResource>();
+        for (int count = 0; count < num; count++) {
+            results.add(recentEpisodes.getChildren().get(count));
+        }
+        return results;
     }
-    
-     return results;
-    
+
+    public static List<IMediaResource> GetNextEpisodesToWatch(int num) {
+        List<IMediaResource> results = new ArrayList<IMediaResource>();
+        for (int count = 0; count < num;) {
+            IMediaResource cFolder = lastWatched.getChildren().get(count);
+            IMediaResource firstEp = phoenix.umb.GetChild((IMediaFolder) cFolder, 0);
+            IMediaResource nEpisode = CheckAndGetEpisode(firstEp);
+            if (!nEpisode.equals(null)) {
+                results.add(CheckAndGetEpisode(firstEp));
+                count++;
+            } else {
+                //We didn't find a next episode for this show so don't increase count
+            }
+        }
+
+        return results;
+
     }
 
     public static IMediaResource CheckAndGetEpisode(IMediaResource firstEp) {
-        if(sagex.api.AiringAPI.IsWatchedCompletely(phoenix.media.GetSageMediaFile(firstEp)))
-        {
-            List<IMediaResource> epSorted=phoenix.media.GetChildren(sortedEpisodes.getChild(firstEp.getTitle()));
+        if (sagex.api.AiringAPI.IsWatchedCompletely(phoenix.media.GetSageMediaFile(firstEp))) {
+            List<IMediaResource> epSorted = phoenix.media.GetChildren(sortedEpisodes.getChild(firstEp.getTitle()));
             int element = epSorted.indexOf(firstEp);
-            if(epSorted.size()>element)
-            {
-                return epSorted.get(element+1);
-            }
-            else
-            {
-            //Return null for no next episode to watch show is done.   
-            return null;
+            if (epSorted.size() > element) {
+                return epSorted.get(element + 1);
+            } else {
+                //Return null for no next episode to watch show is done.   
+                return null;
             }
         }
-            return firstEp;
+        return firstEp;
 
     }
-    
-    
 
 }
