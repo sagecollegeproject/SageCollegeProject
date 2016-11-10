@@ -34,7 +34,7 @@ public class nextEpisodes {
         System.out.println("time to run " + (time - System.currentTimeMillis()));
         System.out.println(GetTopBarItems(3, 3).size());
         for (Object test : GetTopBarItems(3, 3)) {
-            System.out.println(phoenix.media.GetTitle(test));
+            System.out.println(phoenix.metadata.GetEpisodeName(test));
         }
 
     }
