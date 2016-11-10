@@ -35,7 +35,7 @@ public class fanart {
         if (phoenix.image.GetImage(Path, Tag) == null || Path.length() < 0) {
 
             phoenix.image.CreateImage(Tag, Path, "[{name:scale, width:" + Scale + "}]", true);
-
+           
         }
         return phoenix.image.GetImage(Path, Tag);
 
@@ -45,5 +45,22 @@ public class fanart {
     {
     if(guideBox.hasGuideBoxImage(Title)){return guideBox.getGuideBoxImage(Title);}
     else{return phoenix.fanart.GetDefaultEpisode(SageObj);}
+    }
+    
+    public static Object GetFanartImage(String Tag,String Title)
+    {
+    String fanart=phoenix.fanart.GetSeriesBackground(Title);
+    if(fanart==null)
+    {
+        if(guideBox.hasGuideBoxImage(Title)){
+    return guideBox.getGuideBoxImage(Title);}
+        else
+        {
+        return null;
+        }
+    }
+    else{
+    return GetScaledFanart(Tag,fanart);
+    }
     }
 }

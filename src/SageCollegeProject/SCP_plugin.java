@@ -44,7 +44,7 @@ public class SCP_plugin implements SageTVPlugin {
       lastUpdate=java.lang.Long.parseLong("100");
       }
       Long currTime=System.currentTimeMillis();
-      Long delayTime=(currTime-lastUpdate>timeBetween.longValue())||lastUpdate==100?1000:currTime-lastUpdate;
+      Long delayTime=(currTime-lastUpdate>timeBetween.longValue())||lastUpdate==100?1000:timeBetween-(currTime-lastUpdate);
       System.out.println("SCP GuideBox delay until next update ="+delayTime);
       timer.setInitialDelay(delayTime.intValue());
       timer.start();
