@@ -39,8 +39,7 @@ public class nextEpisodes {
 
     }
 
-    public static void CreateAllViewsForEpisodeNext() {
-
+    public static void CreateAllViewsForEpisodeNext() {  
         lastWatched = CreateView("sagecollegeproject.allTVRecentlyWatched");
         sortedEpisodes = CreateView("sagecollegeproject.allTVnoSeasons");
         recentEpisodes = CreateView("sagecollegeproject.RecentActivity");
@@ -91,14 +90,16 @@ public class nextEpisodes {
 
     public static List<IMediaResource> GetNextEpisodesToWatch(int num) {
         List<IMediaResource> results = new ArrayList<IMediaResource>();
-        for (int count = 0; count < num;) {
+        for (int count = 0; count < num&&count<lastWatched.getChildren().size();) {
             IMediaResource cFolder = lastWatched.getChildren().get(count);
             IMediaResource firstEp = phoenix.umb.GetChild((IMediaFolder) cFolder, 0);
             IMediaResource nEpisode = CheckAndGetEpisode(firstEp);
-            if (!nEpisode.equals(null)) {
+            if (nEpisode != null) {
                 results.add(CheckAndGetEpisode(firstEp));
                 count++;
             } else {
+                count++;
+                num++;
                 //We didn't find a next episode for this show so don't increase count
             }
         }
@@ -111,7 +112,7 @@ public class nextEpisodes {
         if (sagex.api.AiringAPI.IsWatchedCompletely(phoenix.media.GetSageMediaFile(firstEp))) {
             List<IMediaResource> epSorted = phoenix.media.GetChildren(sortedEpisodes.getChild(firstEp.getTitle()));
             int element = epSorted.indexOf(firstEp);
-            if (epSorted.size() > element) {
+            if (epSorted.size() > element+1) {
                 return epSorted.get(element + 1);
             } else {
                 //Return null for no next episode to watch show is done.   
