@@ -115,8 +115,8 @@ public class nextEpisodes {
             if (epSorted.size() > element+1) {
                 return epSorted.get(element + 1);
             } else {
-                //Return null for no next episode to watch show is done.   
-                return null;
+               //return first episode from list should be starting over
+               return epSorted.get(0);
             }
         }
         return firstEp;
