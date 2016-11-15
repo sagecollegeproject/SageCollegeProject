@@ -30,6 +30,11 @@ public class SCP_plugin implements SageTVPlugin {
     @Override
     public void start() {
       System.out.println("Background loading of GuideBox data started for SageCollegeProject");
+      if(sagex.api.Global.IsClient())
+      {
+          System.out.println("Is client no guidebox needed not implemented for Clients yet.");
+      }
+      else{
       System.out.println("Go ahead and set next files");
       nextEpisodes.CreateAllViewsForEpisodeNext();
       timer= new Timer(timeBetween,new ActionListener(){
@@ -47,7 +52,7 @@ public class SCP_plugin implements SageTVPlugin {
       Long delayTime=(currTime-lastUpdate>timeBetween.longValue())||lastUpdate==100?1000:timeBetween-(currTime-lastUpdate);
       System.out.println("SCP GuideBox delay until next update ="+delayTime);
       timer.setInitialDelay(delayTime.intValue());
-      timer.start();
+      timer.start();}
     }
 
     @Override

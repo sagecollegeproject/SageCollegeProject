@@ -16,9 +16,6 @@ import sagex.phoenix.vfs.IMediaResource;
  * @author SageCollegeProject
  */
 public class metadata {
-    
-    private static Object EpisodesSorted="";
-    private static int currIndex=0;
 
     public static String GetEpisodeNumPad(Object sageObj) {
         String epNum = Integer.toString(ShowAPI.GetShowEpisodeNumber(sageObj));
@@ -27,7 +24,6 @@ public class metadata {
         }
         return epNum;
     }
-    
 
     public static String GetSeasonNumPad(Object sageObj) {
         String seasNum = Integer.toString(ShowAPI.GetShowSeasonNumber(sageObj));
@@ -55,90 +51,25 @@ public class metadata {
         }
         return rSeries;
     }
-    public static Object GetNextShowToWatch(IMediaFolder show)
-    {
-    return getNextShow(SortShowsByWatched(show));
-    }
-    
-    public static int GetSeasonElementForFocus(Object episode, IMediaFolder show)
-    {
-        int loc=0;
-        Object currEpisode=phoenix.media.GetSageMediaFile(episode);
-        String seasonNum=GetSeasonNumPad(currEpisode);
-        if(!isSingleSeason(show))
-        {
-        for(int i=0;i<phoenix.umb.GetChildCount(show);i++)
-        {
-         IMediaResource currSeason= phoenix.umb.GetChild(show,i); 
-         String curName=phoenix.media.GetTitle(currSeason);
-         if(curName.endsWith(seasonNum))
-         {
-         loc=i;
-         break;
-         }
+
+    public static int GetSeasonElementForFocus(Object episode, IMediaFolder show) {
+        int loc = 0;
+        Object currEpisode = phoenix.media.GetSageMediaFile(episode);
+        String seasonNum = GetSeasonNumPad(currEpisode);
+        if (!isSingleSeason(show)) {
+            for (int i = 0; i < phoenix.umb.GetChildCount(show); i++) {
+                IMediaResource currSeason = phoenix.umb.GetChild(show, i);
+                String curName = phoenix.media.GetTitle(currSeason);
+                if (curName.endsWith(seasonNum)) {
+                    loc = i;
+                    break;
+                }
+            }
         }
-        }
-    return loc;
+        return loc;
     }
-    
-    public static Boolean isSingleSeason(IMediaFolder show)
-    {
-    return phoenix.umb.GetChildCount(show)==1||phoenix.umb.IsFolder(phoenix.umb.GetChild(show,0))==false;
-    }
-    
-    public static Object[] SortShowsByWatched(IMediaFolder show)
-    {
-        List<IMediaResource> Episodes= new ArrayList<>();
-        if(isSingleSeason(show))
-        {
-         IMediaResource showsChild= phoenix.umb.GetChild(show,0);
-         Episodes.addAll(phoenix.media.GetChildren(showsChild));
-        }
-        else
-        {
-        for(int i=0;i<phoenix.umb.GetChildCount(show);i++)
-        {
-            IMediaResource cChild=phoenix.umb.GetChild(show, i);
-            Episodes.addAll(phoenix.media.GetChildren(cChild));
-            
-        }
-        }
-         return (Object[]) sagex.api.Database.SortLexical(Episodes, true,"SageCollegeProject_metadata_getSortedByWatchTime");
-    }
-    public static Object[] GetEpisodesSorted()
-    {
-    return (Object[])EpisodesSorted;
-    }
-    
-    public static int GetEpisodeIndex()
-    {
-    return currIndex;
-    }
-    
-    public static Object getNextShow(Object[] episodes)
-    {
-      Object currEpisode= episodes[0];
-      Object sageObj=phoenix.media.GetSageMediaFile(currEpisode);
-      Object[] episodesResorted=(Object[]) sagex.api.Database.SortLexical(episodes,false,"SageCollegeProject_metadata_getSortedByAiringTime");
-      int elementloc=sagex.api.Utility.FindElementIndex(episodesResorted,currEpisode);
-      EpisodesSorted= episodesResorted;
-      currIndex=elementloc;
-      if(sagex.api.AiringAPI.IsWatchedCompletely(sageObj))
-      {
-      return episodesResorted[elementloc+1];
-      }
-      else
-      {
-      return currEpisode;
-      }
-    }
-    
-    public static long getSortedByWatchTime(IMediaResource imr)
-    {
-    return sagex.api.AiringAPI.GetRealWatchedEndTime(imr.getMediaObject());
-    }
-    public static long getSortedByAiringTime(IMediaResource imr)
-    {
-    return sagex.api.ShowAPI.GetOriginalAiringDate(imr.getMediaObject());
+
+    public static Boolean isSingleSeason(IMediaFolder show) {
+        return phoenix.umb.GetChildCount(show) == 1 || phoenix.umb.IsFolder(phoenix.umb.GetChild(show, 0)) == false;
     }
 }

@@ -75,7 +75,6 @@ public class menu {
         if (!menuItems.contains(",")) {
             System.out.println("Main Menu Items is not a valid property please reset value=" + menuItems);
         }
-        System.out.println("Menu property ="+menuItems);
         String[] menus = menuItems.split(",");
         return menus;
     }
