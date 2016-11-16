@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import sagex.UIContext;
 import sagex.api.Configuration;
+import sagex.phoenix.Phoenix;
 import sagex.phoenix.util.SageTV;
 import sagex.phoenix.vfs.IMediaFolder;
 import sagex.phoenix.vfs.IMediaResource;
@@ -28,9 +29,10 @@ public class menu {
     private static final String MainMenuPropAdder = "MainMenuItems";
 
     public static void main(String[] args) {
-        
- SetDefaultProperties("test");     
- BuildAllViews("test");
+        sage.Sage.TESTING = true;
+        Phoenix.getInstance().initServices();
+        SetDefaultProperties("test");
+        BuildAllViews("test");
     }
 
     public static void BuildAllViews(String ui) {
@@ -45,59 +47,62 @@ public class menu {
             System.out.println("Current Menu Item =" + name + " " + type);
             if (needsView(type)) {
                 System.out.println("View is needs VFS lets build it =" + name);
-                String view = GetMenuView(ui,name, type);
-                if (!view.equals("")) {
-                    allViews.put(name, buildView(view));
+                String view = GetMenuView(ui, name, type);
+                if(type.equals("NextUp"))
+                {
+                List<IMediaResource> imr= nextEpisodes.GetTopBarItems(3,3);
+                AddBlankItems(imr,type);
+                allViews.put(name, imr);
+                }
+                else if (!view.equals("")) {
+                    List<IMediaResource> imr = buildView(view);
+                    AddBlankItems(imr, type);
+                    allViews.put(name, imr);
                 }
             }
         }
 
     }
-    
-     public static Boolean NeedsFolderView(IMediaResource show,String Type)
-    {
-        if(isTypePreviewGuide(Type))
-        {
-        return true;
-        }
-        else if(phoenix.umb.IsFolder(show))
-        {        
-         return true;
-        }
-        else
-        {
-        return false;
+
+    public static Boolean NeedsFolderView(IMediaResource show, String Type) {
+        if (isTypePreviewGuide(Type)) {
+            return true;
+        } else if (phoenix.umb.IsFolder(show)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
     public static String[] GetAllMenuItems(String ui) {
-        String menuItems = Configuration.GetProperty(new UIContext(ui),Props + MainMenuPropAdder, "Shows;TV,Guide;Guide,ToDo;Todo,Settings;Settings,Search;Search,Exit;Exit");
+        String menuItems = Configuration.GetProperty(new UIContext(ui), Props + MainMenuPropAdder, "Shows;TV,Guide;Guide,ToDo;Todo,Settings;Settings,Search;Search,Exit;Exit");
         if (!menuItems.contains(",")) {
             System.out.println("Main Menu Items is not a valid property please reset value=" + menuItems);
         }
+        System.out.println(menuItems);
         String[] menus = menuItems.split(",");
         return menus;
     }
 
-    public static void setColorProperty(String ui,String Name, String Value) {
-        Configuration.SetProperty(new UIContext(ui),Name, Value);
-        Configuration.SetProperty(new UIContext(ui),Props + Name + ColorPropAdder, Value);
+    public static void setColorProperty(String ui, String Name, String Value) {
+        Configuration.SetProperty(new UIContext(ui), Name, Value);
+        Configuration.SetProperty(new UIContext(ui), Props + Name + ColorPropAdder, Value);
     }
 
-    public static void setViewProperty(String ui,String Name, String Value) {
-        Configuration.SetProperty(new UIContext(ui),Props + Name + ViewPropAdder, Value);
+    public static void setViewProperty(String ui, String Name, String Value) {
+        Configuration.SetProperty(new UIContext(ui), Props + Name + ViewPropAdder, Value);
     }
 
-    public static void deleteMenuItem(String ui,String Menu) {
+    public static void deleteMenuItem(String ui, String Menu) {
         String name = GetMenuName(Menu);
-        deleteMenuViewProp(ui,Menu);
+        deleteMenuViewProp(ui, Menu);
         List<String> propsToDelete = GetProperties(name);
         for (String prop : propsToDelete) {
-            deleteMenuViewProp(ui,prop);
+            deleteMenuViewProp(ui, prop);
         }
     }
 
-    public static void deleteMenuViewProp(String ui,String Menu) {
+    public static void deleteMenuViewProp(String ui, String Menu) {
         String[] menu = GetAllMenuItems(ui);
         StringBuilder newMenu = new StringBuilder();
         for (int i = 0; i < menu.length; i++) {
@@ -125,29 +130,30 @@ public class menu {
         Configuration.RemoveProperty(Prop);
     }
 
-    public static void RenameView(String ui,String Menu, String nMenu) {
+    public static void RenameView(String ui, String Menu, String nMenu) {
         String name = GetMenuName(Menu);
         String nName = GetMenuName(nMenu);
         for (String prop : GetProperties(name)) {
-            String cPropValue = Configuration.GetProperty(new UIContext(ui),prop, "");
+            String cPropValue = Configuration.GetProperty(new UIContext(ui), prop, "");
             Configuration.SetProperty(new UIContext(ui), prop.replace(name, nName), cPropValue);
         }
-        RenameMenuItem(ui,Menu, nMenu);
+        RenameMenuItem(ui, Menu, nMenu);
     }
 
-    public static void RenameMenuItem(String ui,String Menu, String nMenu) {
-        String props = Configuration.GetProperty(new UIContext(ui),Props + MainMenuPropAdder, "");
+    public static void RenameMenuItem(String ui, String Menu, String nMenu) {
+        String props = Configuration.GetProperty(new UIContext(ui), Props + MainMenuPropAdder, "");
         props = props.replace(Menu, nMenu);
         Configuration.SetProperty(new UIContext(ui), Props + MainMenuPropAdder, props);
     }
 
-    public static void addMenuItem(String ui,String Menu) {
-        String curMenu = Configuration.GetProperty(new UIContext(ui),Props + MainMenuPropAdder, "NotSet");
-        if(curMenu=="NotSet"){
-            
-            curMenu=Menu;}
-            else{    
-        curMenu = curMenu + "," + Menu;}
+    public static void addMenuItem(String ui, String Menu) {
+        String curMenu = Configuration.GetProperty(new UIContext(ui), Props + MainMenuPropAdder, "NotSet");
+        if ("NotSet".equals(curMenu)) {
+
+            curMenu = Menu;
+        } else {
+            curMenu = curMenu + "," + Menu;
+        }
         Configuration.SetProperty(new UIContext(ui), Props + MainMenuPropAdder, curMenu);
     }
 
@@ -159,8 +165,36 @@ public class menu {
         return phoenix.media.GetChildren(phoenix.umb.CreateView(view));
     }
 
+    public static void AddBlankItems(List<IMediaResource> imr, String Type) {
+        int[] blankCount = GetBlankCount(Type);
+
+        if (blankCount[0] > 0 || blankCount[1] > 0) {
+            for (int i = 0; i < blankCount[0]; i++) {
+                imr.add(0, null);
+
+            }
+            for (int i = 0; i < blankCount[1]; i++) {
+                imr.add(null);
+
+            }
+        }
+    }
+
+    public static int[] GetBlankCount(String Type) {
+        if (isTypeFavorites(Type) || isTypeTV(Type)) {
+            return new int[]{3, 3};
+        } else if (isTypePreviewGuide(Type)) {
+            return new int[]{9, 15};
+        } else if (isTypeNextUp(Type)) {
+            return new int[]{4, 8};
+        } else {
+            return new int[]{0, 0};
+        }
+
+    }
+
     public static boolean needsView(String type) {
-        return isTypeTV(type) || isTypeScheduled(type) || isTypeFavorites(type) || isTypePreviewGuide(type);
+        return isTypeTV(type) || isTypeScheduled(type) || isTypeFavorites(type) || isTypePreviewGuide(type) ||isTypeNextUp(type);
     }
 
     public static String[] splitMenu(String Menu) {
@@ -183,27 +217,31 @@ public class menu {
     public static boolean isTypeTV(String Type) {
         return Type.equals("TV");
     }
-   
+
     public static boolean isTypeScheduled(String Type) {
         return Type.equals("Scheduled");
     }
+
     public static boolean isTypeFavorites(String Type) {
         return Type.equals("Favorites");
-        
+
     }
+
     public static boolean isTypePreviewGuide(String Type) {
         return Type.equals("PreviewGuide");
     }
-    
-    
+
+    public static boolean isTypeNextUp(String Type) {
+        return Type.equals("NextUp");
+    }
 
     public static boolean isTypeGuide(String Type) {
         return Type.equals("Guide") || Type.equals("ToDo");
     }
 
-    public static String GetMenuView(String ui,String name, String type) {
+    public static String GetMenuView(String ui, String name, String type) {
 
-        String value = Configuration.GetProperty(new UIContext(ui),Props + name + ViewPropAdder, "NotSet");
+        String value = Configuration.GetProperty(new UIContext(ui), Props + name + ViewPropAdder, "NotSet");
         if (doesPropertyNeedSet(value)) {
 
             if (isTypeTV(type)) {
@@ -221,37 +259,33 @@ public class menu {
         }
         return value;
     }
-    
-    public static void SetDefaultProperties(String ui)
-    {
-    sagex.api.Configuration.SetProperty(new UIContext(ui),Props+MainMenuPropAdder,"NotSet");
-    SetDefaultView(ui,"NextUp;NextUp","cc0000","NotUsed");
-    SetDefaultView(ui,"AllShows;TV","009933","sagecollegeproject.allTVseasons");
-    SetDefaultView(ui,"ManageFavorites;Favorites","cc9933","sagecollegeproject.favorites");
-    SetDefaultView(ui,"OnNow;PreviewGuide","666699","sagecollegeproject.currentlyairing");
-    SetDefaultView(ui,"Guide;Guide","006699","NotUsed");
-    SetDefaultView(ui,"Scheduled;Scheduled","990066","SageCollegeProject.scheduledrecordings");
-    SetDefaultView(ui,"TVList;TV","cc0000","sagecollegeproject.allTVnoSeasons");
-    SetDefaultView(ui,"Settings;Settings","009933","NotUsed");
-    SetDefaultView(ui,"Search;Search","cc0000","NotUsed");
-    SetDefaultView(ui,"Exit;Exit","009933","NotUsed");
-    }
-       
-    
-    public static void SetDefaultView(String UI,String name,String color,String vfsView)
-    {
-        String mName=GetMenuName(name);
-        addMenuItem(UI,name);
-        setColorProperty(UI,mName,color);
-        setViewProperty(UI,mName,vfsView);
-        
-        
+
+    public static void SetDefaultProperties(String ui) {
+        sagex.api.Configuration.SetProperty(new UIContext(ui), Props + MainMenuPropAdder, "NotSet");
+        SetDefaultView(ui, "NextUp;NextUp", "cc0000", "NotUsed");
+        SetDefaultView(ui, "AllShows;TV", "009933", "sagecollegeproject.allTVseasons");
+        SetDefaultView(ui, "ManageFavorites;Favorites", "cc9933", "sagecollegeproject.favorites");
+        SetDefaultView(ui, "OnNow;PreviewGuide", "666699", "sagecollegeproject.currentlyairing");
+        SetDefaultView(ui, "Guide;Guide", "006699", "NotUsed");
+        SetDefaultView(ui, "Scheduled;Scheduled", "990066", "SageCollegeProject.scheduledrecordings");
+        SetDefaultView(ui, "TVList;TV", "cc0000", "sagecollegeproject.allTVnoSeasons");
+        SetDefaultView(ui, "Settings;Settings", "009933", "NotUsed");
+        SetDefaultView(ui, "Search;Search", "cc0000", "NotUsed");
+        SetDefaultView(ui, "Exit;Exit", "009933", "NotUsed");
     }
 
-    public static String GetFontSafeColor(String color)
-    {
-    return "#"+color;
+    public static void SetDefaultView(String UI, String name, String color, String vfsView) {
+        String mName = GetMenuName(name);
+        addMenuItem(UI, name);
+        setColorProperty(UI, mName, color);
+        setViewProperty(UI, mName, vfsView);
+
     }
+
+    public static String GetFontSafeColor(String color) {
+        return "#" + color;
+    }
+
     public static Boolean doesPropertyNeedSet(String property) {
         return property.equals("NotSet");
     }
