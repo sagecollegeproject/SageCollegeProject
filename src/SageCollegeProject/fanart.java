@@ -32,13 +32,23 @@ public class fanart {
             Scale = bannerScale;
         }
 
-        if (phoenix.image.GetImage(Path, Tag) == null || Path.length() < 0) {
+        GetFanartScaled(Path, Tag, Scale);
+        return phoenix.image.GetImage(Path, Tag);
 
+    }
+     public static Object GetScaledFanart(String Tag, String Path,int scaleW) 
+     {
+     String scaleS=java.lang.String.valueOf(scaleW);
+     GetFanartScaled(Path,Tag+scaleS,scaleS);
+     return phoenix.image.GetImage(Path, Tag+scaleS);
+     }
+
+    public static void GetFanartScaled(String Path, String Tag, String Scale) {
+        if (phoenix.image.GetImage(Path, Tag) == null || Path.length() < 0) {
+            
             phoenix.image.CreateImage(Tag, Path, "[{name:scale, width:" + Scale + "}]", true);
            
         }
-        return phoenix.image.GetImage(Path, Tag);
-
     }
     
     public static Object GetShowImage(String Title,Object SageObj)
