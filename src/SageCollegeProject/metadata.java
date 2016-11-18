@@ -72,4 +72,26 @@ public class metadata {
     public static Boolean isSingleSeason(IMediaFolder show) {
         return phoenix.umb.GetChildCount(show) == 1 || phoenix.umb.IsFolder(phoenix.umb.GetChild(show, 0)) == false;
     }
+    
+    public static String ScrapLeadingArticles(String title)
+    {
+        java.lang.Character[] test={'a','b'};
+        String lTitle=title.toLowerCase();
+    if(lTitle.startsWith("the "))
+    {
+    return title.substring(4);
+    }
+    else if (lTitle.startsWith("a "))
+    {
+    return title.substring(2);
+    }
+    else if(lTitle.startsWith("an "))
+    {
+    return title.substring(3);
+    }
+    else
+    {
+    return title;
+    }
+    }
 }

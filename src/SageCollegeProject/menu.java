@@ -48,13 +48,11 @@ public class menu {
             if (needsView(type)) {
                 System.out.println("View is needs VFS lets build it =" + name);
                 String view = GetMenuView(ui, name, type);
-                if(type.equals("NextUp"))
-                {
-                List<IMediaResource> imr= nextEpisodes.GetTopBarItems(3,3);
-                AddBlankItems(imr,type);
-                allViews.put(name, imr);
-                }
-                else if (!view.equals("")) {
+                if (type.equals("NextUp")) {
+                    List<IMediaResource> imr = nextEpisodes.GetTopBarItems(3, 3);
+                    AddBlankItems(imr, type);
+                    allViews.put(name, imr);
+                } else if (!view.equals("")) {
                     List<IMediaResource> imr = buildView(view);
                     AddBlankItems(imr, type);
                     allViews.put(name, imr);
@@ -85,8 +83,11 @@ public class menu {
     }
 
     public static void setColorProperty(String ui, String Name, String Value) {
-        Configuration.SetProperty(new UIContext(ui), Name, Value);
         Configuration.SetProperty(new UIContext(ui), Props + Name + ColorPropAdder, Value);
+    }
+
+    public static void setLetterJumpProperty(String ui, String Name, String Value) {
+        Configuration.SetProperty(new UIContext(ui), Props + Name + "letterJump", Value);
     }
 
     public static void setViewProperty(String ui, String Name, String Value) {
@@ -194,7 +195,7 @@ public class menu {
     }
 
     public static boolean needsView(String type) {
-        return isTypeTV(type) || isTypeScheduled(type) || isTypeFavorites(type) || isTypePreviewGuide(type) ||isTypeNextUp(type);
+        return isTypeTV(type) || isTypeScheduled(type) || isTypeFavorites(type) || isTypePreviewGuide(type) || isTypeNextUp(type);
     }
 
     public static String[] splitMenu(String Menu) {
@@ -263,7 +264,7 @@ public class menu {
     public static void SetDefaultProperties(String ui) {
         sagex.api.Configuration.SetProperty(new UIContext(ui), Props + MainMenuPropAdder, "NotSet");
         SetDefaultView(ui, "NextUp;NextUp", "cc0000", "NotUsed");
-        SetDefaultView(ui, "AllShows;TV", "009933", "sagecollegeproject.allTVseasons");
+        SetDefaultView(ui, "AllShows;TV", "009933", "sagecollegeproject.allTVseasons", "true");
         SetDefaultView(ui, "ManageFavorites;Favorites", "cc9933", "sagecollegeproject.favorites");
         SetDefaultView(ui, "OnNow;PreviewGuide", "666699", "sagecollegeproject.currentlyairing");
         SetDefaultView(ui, "Guide;Guide", "006699", "NotUsed");
@@ -279,7 +280,12 @@ public class menu {
         addMenuItem(UI, name);
         setColorProperty(UI, mName, color);
         setViewProperty(UI, mName, vfsView);
+    }
 
+    public static void SetDefaultView(String UI, String name, String color, String vfsView, String letterJump) {
+        String mName = GetMenuName(name);
+        setLetterJumpProperty(UI, mName, letterJump);
+        SetDefaultView(UI, name, color, vfsView);
     }
 
     public static String GetFontSafeColor(String color) {
